@@ -1,7 +1,9 @@
 
 const AccumulatedSpending = () => {
   return (
-    <div>AccumulatedSpending</div>
+    <main>
+        accumulated spending
+    </main>
   )
 }
 
