@@ -1,8 +1,9 @@
+import BalanceSection from "../components/BalanceSection"
 
 const AccumulatedSpending = () => {
   return (
-    <main>
-        accumulated spending
+    <main className="p-3">
+        <BalanceSection/>
     </main>
   )
 }
