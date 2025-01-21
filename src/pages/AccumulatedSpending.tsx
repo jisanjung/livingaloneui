@@ -1,9 +1,9 @@
-import BalanceSection from "../components/BalanceSection"
+import Header from "../components/Header"
 
 const AccumulatedSpending = () => {
   return (
     <main className="p-3">
-        <BalanceSection/>
+        <Header/>
     </main>
   )
 }
