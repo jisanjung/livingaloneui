@@ -3,7 +3,7 @@ import ExpenseDropdown from "./ExpenseDropdown"
 
 const Header = () => {
   return (
-    <header className="flex justify-between">
+    <header className="flex justify-between items-center">
         <Balance/>
         <ExpenseDropdown/>
     </header>
