@@ -2,6 +2,7 @@ import ExpenseInput from './components/ExpenseInput'
 import Header from './components/Header'
 import { createStore, StoreProvider } from 'easy-peasy';
 import globalState, { GlobalStateModel } from './model';
+import Keypad from './components/Keypad';
 
 function App() {
 
@@ -9,9 +10,10 @@ function App() {
 
   return (
     <StoreProvider store={store}>
-      <main className="p-3">
+      <main className="p-3 h-screen">
         <Header/>
         <ExpenseInput/>
+        <Keypad/>
       </main>
     </StoreProvider>
   )
