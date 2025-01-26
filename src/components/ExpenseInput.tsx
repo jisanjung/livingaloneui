@@ -1,19 +1,9 @@
-import { useState } from "react"
-
 const ExpenseInput = () => {
 
-    const [expense, setExpense] = useState('0');
-
   return (
-    <div className="flex justify-center">
-        <input 
-            type="text" 
-            inputMode="numeric" 
-            value={expense} 
-            onChange={(e) => setExpense(e.target.value)}
-            className="text-center text-7xl w-full py-2 my-12"
-            autoFocus={true}
-        />
+    <div className="flex justify-center items-end my-16">
+        <p className="text-3xl mb-2 mr-1 text-gray-400">$</p>
+        <p className="text-6xl font-bold">0</p>
     </div>
   )
 }
