@@ -10,7 +10,7 @@ function App() {
 
   return (
     <StoreProvider store={store}>
-      <main className="p-3 h-screen">
+      <main className="p-3">
         <Header/>
         <ExpenseInput/>
         <Keypad/>
