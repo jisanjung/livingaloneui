@@ -8,24 +8,18 @@ const Keypad = () => {
                 <NumberKey number={1}/>
                 <NumberKey number={2}/>
                 <NumberKey number={3}/>
-                <NumberKey number='D'/>
+                <NumberKey number='C'/>
             </div>
             <div className="flex">
-                <NumberKey number={1}/>
-                <NumberKey number={2}/>
-                <NumberKey number={3}/>
-                <NumberKey number='D'/>
+                <NumberKey number={4}/>
+                <NumberKey number={5}/>
+                <NumberKey number={6}/>
+                <NumberKey number={0}/>
             </div>
             <div className="flex">
-                <NumberKey number={1}/>
-                <NumberKey number={2}/>
-                <NumberKey number={3}/>
-                <NumberKey number='D'/>
-            </div>
-            <div className="flex">
-                <NumberKey number={1}/>
-                <NumberKey number={2}/>
-                <NumberKey number={3}/>
+                <NumberKey number={7}/>
+                <NumberKey number={8}/>
+                <NumberKey number={9}/>
                 <NumberKey number='D'/>
             </div>
         </div>
