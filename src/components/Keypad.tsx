@@ -1,6 +1,6 @@
 import GenericKey from "./GenericKey";
 import NumberKey from "./NumberKey";
-import { IoBackspaceOutline, IoCheckmark } from "react-icons/io5";
+// import { IoBackspaceOutline, IoCheckmark } from "react-icons/io5";
 
 const Keypad = () => {
   return (
@@ -11,7 +11,7 @@ const Keypad = () => {
                 <NumberKey number={2}/>
                 <NumberKey number={3}/>
                 <GenericKey color="bg-red-200" dark={false} icon={
-                    <IoBackspaceOutline/>
+                    'C'
                 }/>
             </div>
             <div className="flex">
@@ -25,7 +25,7 @@ const Keypad = () => {
                 <NumberKey number={8}/>
                 <NumberKey number={9}/>
                 <GenericKey color="bg-black" dark={true} icon={
-                    <IoCheckmark/>
+                    'OK'
                 }/>
             </div>
         </div>

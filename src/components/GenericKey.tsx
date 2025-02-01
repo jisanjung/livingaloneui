@@ -1,7 +1,7 @@
 import React from "react"
 
 interface GenericKeyProps {
-    icon: React.ReactNode;
+    icon: React.ReactNode | string;
     color: string;
     dark: boolean;
 };
