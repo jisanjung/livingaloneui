@@ -10,7 +10,7 @@ const Keypad = () => {
                 <NumberKey number={1}/>
                 <NumberKey number={2}/>
                 <NumberKey number={3}/>
-                <GenericKey color="red" dark={false} icon={
+                <GenericKey color="bg-red-200" dark={false} icon={
                     <IoBackspaceOutline/>
                 }/>
             </div>
@@ -24,7 +24,7 @@ const Keypad = () => {
                 <NumberKey number={7}/>
                 <NumberKey number={8}/>
                 <NumberKey number={9}/>
-                <GenericKey color="black" dark={true} icon={
+                <GenericKey color="bg-black" dark={true} icon={
                     <IoCheckmark/>
                 }/>
             </div>
