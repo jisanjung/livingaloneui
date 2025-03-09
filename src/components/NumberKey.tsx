@@ -1,18 +1,25 @@
 import { useState } from "react";
+import { useStoreActions } from "../model";
 
 interface NumberKeyProps {
-    number: number | string;
+    number: number;
 }
 
 const NumberKey = ({ number }: NumberKeyProps) => {
 
   const [keypadTapped, setKeypadTapped] = useState(false);
+  const modifyExpense = useStoreActions(actions => actions.expense.modify);
+
+  const handleNumberTap = (number: number) => {
+    setKeypadTapped(true);
+    modifyExpense(number);
+  };
 
   return (
     <button className="w-1/4 m-1"
       onMouseDown={() => setKeypadTapped(true)}
       onMouseUp={() => setKeypadTapped(false)}
-      onTouchStart={() => setKeypadTapped(true)}
+      onTouchStart={() => handleNumberTap(number)}
       onTouchEnd={() => setKeypadTapped(false)}
     >
         <div className={`py-6 ${keypadTapped ? 'bg-gray-300' : 'bg-gray-200'} rounded-3xl`}>
