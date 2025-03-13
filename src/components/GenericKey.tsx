@@ -4,19 +4,12 @@ interface GenericKeyProps {
     icon: React.ReactNode;
     color: string;
     dark: boolean;
+    tappedColor: string;
 };
 
-const GenericKey = ({ icon, color, dark }: GenericKeyProps) => {
+const GenericKey = ({ icon, color, dark, tappedColor }: GenericKeyProps) => {
 
   const [keypadTapped, setKeypadTapped] = useState(false);
-
-  const tappedKeypadColor = (color: string) => {
-    if (color === 'bg-black') {
-      return 'bg-gray-700';
-    }
-    // currently, assume the only other color is red (backspace)
-    return 'bg-red-300';
-  };
 
   return (
     <button className="w-1/4 m-1"
@@ -25,7 +18,7 @@ const GenericKey = ({ icon, color, dark }: GenericKeyProps) => {
       onTouchStart={() => setKeypadTapped(true)}
       onTouchEnd={() => setKeypadTapped(false)}
     >
-        <div className={`py-6 ${keypadTapped ? tappedKeypadColor(color) : color} rounded-3xl`}>
+        <div className={`py-6 ${keypadTapped ? tappedColor : color} rounded-3xl`}>
             <span className={`text-2xl font-bold flex justify-center ${dark && 'text-white'}`}>
                 {icon}
             </span>
