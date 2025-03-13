@@ -1,4 +1,5 @@
 import { Action, action, createTypedHooks } from "easy-peasy";
+import { EXPENSE_NAMES } from "./constants";
 
 // refer here to how to structure easy-peasy store using TS:
 // https://github.com/ctrlplusb/easy-peasy-typescript/tree/master/src/model
@@ -9,8 +10,14 @@ interface ExpenseModel {
     modify: Action<ExpenseModel, number>;
 };
 
+interface ExpenseNameModel {
+    current: string;
+    change: Action<ExpenseNameModel, string>
+}
+
 export interface GlobalStateModel {
-    expense: ExpenseModel
+    expense: ExpenseModel;
+    expenseName: ExpenseNameModel;
 };
 
 // state declarations
@@ -20,9 +27,16 @@ const expense: ExpenseModel = {
         state.input += payload;
     }),
 };
+const expenseName: ExpenseNameModel = {
+    current: EXPENSE_NAMES.ACCUMULATED_SPENDING,
+    change: action((state, payload) => {
+        state.current = payload;
+    }),
+};
 
 const globalState = {
-    expense
+    expense,
+    expenseName,
 };
 
 const typedHooks = createTypedHooks<GlobalStateModel>();
