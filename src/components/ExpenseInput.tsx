@@ -3,7 +3,7 @@ import { convertToCurrency } from "../utils";
 
 const ExpenseInput = () => {
 
-  const currentExpenseInput = useStoreState(state => state.expense.input);
+  const currentExpenseInput = useStoreState(state => state.expense.current);
   
   const parseExpense = (currentExpenseInput: string) => {
     try {

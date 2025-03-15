@@ -8,11 +8,11 @@ interface NumberKeyProps {
 const NumberKey = ({ number }: NumberKeyProps) => {
 
   const [keypadTapped, setKeypadTapped] = useState(false);
-  const modifyExpense = useStoreActions(actions => actions.expense.modify);
+  const inputExpense = useStoreActions(actions => actions.expense.input);
 
   const handleNumberTap = (number: number) => {
     setKeypadTapped(true);
-    modifyExpense(number);
+    inputExpense(number);
   };
 
   return (

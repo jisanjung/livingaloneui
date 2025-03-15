@@ -6,8 +6,9 @@ import { EXPENSE_NAMES } from "./constants";
 
 // interfaces
 interface ExpenseModel {
-    input: string;
-    modify: Action<ExpenseModel, number>;
+    current: string;
+    input: Action<ExpenseModel, number>;
+    delete: Action<ExpenseModel, null>;
 };
 
 interface ExpenseNameModel {
@@ -22,9 +23,16 @@ export interface GlobalStateModel {
 
 // state declarations
 const expense: ExpenseModel = {
-    input: '',
-    modify: action((state, payload) => {
-        state.input += payload;
+    current: '',
+    input: action((state, payload) => {
+        state.current += payload;
+    }),
+    delete: action((state) => {
+        if (!state.current || state.current.length === 0) {
+            return;
+        }
+        const trimmed = state.current.slice(0, -1);
+        state.current = trimmed;
     }),
 };
 const expenseName: ExpenseNameModel = {
