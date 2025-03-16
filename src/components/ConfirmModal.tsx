@@ -3,10 +3,12 @@ import Button from "./Button";
 import { useStoreState } from "../model";
 import { EXPENSE_NAMES } from "../constants";
 import { convertToCurrency } from "../utils";
+import ConfirmationMessage from "./ConfirmationMessage";
 
 const ConfirmModal = () => {
 
     const [loading, setLoading] = useState(false);
+    const [confirmed, setConfirmed] = useState(false);
     const currentExpenseInput = useStoreState(state => state.expense.current);
     const currentExpenseName = useStoreState(state => state.expenseName.current);
 
@@ -21,16 +23,20 @@ const ConfirmModal = () => {
             </h1>
             <p className="text-gray-500">in <span>{EXPENSE_NAMES.map[currentExpenseName]}</span></p>
         </div>
+        {confirmed ? 
+        <ConfirmationMessage/> :
         <Button
             type="primary"
             className='w-full'
             functionOnTapped={() => {
                 setLoading(true);
+                setConfirmed(true);
             }}
             loading={loading}
         >
             Confirm
         </Button>
+        }
     </div>
   )
 }
