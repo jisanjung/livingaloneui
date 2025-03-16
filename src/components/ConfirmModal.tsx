@@ -28,7 +28,7 @@ const ConfirmModal = () => {
         <Button
             type="primary"
             className='w-full'
-            functionOnTapped={() => {
+            onClick={() => {
                 setLoading(true);
                 setConfirmed(true);
             }}

@@ -5,11 +5,16 @@ interface ButtonParams {
     type: string;
     children: string | JSX.Element;
     className: string | undefined;
-    functionOnTapped: () => void;
+    onClick: () => void;
     loading: boolean;
 };
 
-const Button = ({ className, children, functionOnTapped, loading }: ButtonParams) => {
+const Button = ({ 
+    className,
+    children,
+    onClick,
+    loading,
+}: ButtonParams) => {
 
     const [buttonTapped, setButtonTapped] = useState(false);
 
@@ -21,9 +26,14 @@ const Button = ({ className, children, functionOnTapped, loading }: ButtonParams
                 return;
             }
             setButtonTapped(true);
-            functionOnTapped();
         }}
         onTouchEnd={() => setButtonTapped(false)}
+        onClick={() => {
+            if (loading) {
+                return;
+            }
+            onClick();
+        }}
     >
         {loading ? 
         <div className="flex justify-center items-center p-1">
