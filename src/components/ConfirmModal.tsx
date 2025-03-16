@@ -14,7 +14,7 @@ const ConfirmModal = () => {
     const currencyConverted = convertToCurrency(parsedExpenseInput);
 
   return (
-    <div className="fixed bottom-0 right-0 left-0 bg-white p-6 rounded-t-3xl">
+    <div className="fixed bottom-0 right-0 left-0 bg-white py-6 px-3 rounded-t-3xl">
         <div className="text-center pb-6">
             <h1 className="font-bold text-4xl">
                 $<span>{currencyConverted}</span>
