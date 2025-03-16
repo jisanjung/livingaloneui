@@ -5,10 +5,16 @@ interface GenericKeyProps {
     color: string;
     dark: boolean;
     tappedColor: string;
-    onTouchStart: () => void;
+    onClick: () => void;
 };
 
-const GenericKey = ({ icon, color, dark, tappedColor, onTouchStart }: GenericKeyProps) => {
+const GenericKey = ({ 
+  icon,
+  color,
+  dark,
+  tappedColor,
+  onClick
+}: GenericKeyProps) => {
 
   const [keypadTapped, setKeypadTapped] = useState(false);
 
@@ -18,9 +24,9 @@ const GenericKey = ({ icon, color, dark, tappedColor, onTouchStart }: GenericKey
       onMouseUp={() => setKeypadTapped(false)}
       onTouchStart={() => {
         setKeypadTapped(true);
-        onTouchStart();
       }}
       onTouchEnd={() => setKeypadTapped(false)}
+      onClick={() => onClick()}
     >
         <div className={`py-6 ${keypadTapped ? tappedColor : color} rounded-3xl`}>
             <span className={`text-2xl font-bold flex justify-center ${dark && 'text-white'}`}>

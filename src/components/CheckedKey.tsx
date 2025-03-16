@@ -16,7 +16,7 @@ const CheckedKey = () => {
             <IoCheckmark/>
         }
         tappedColor='bg-gray-700'
-        onTouchStart={() => {
+        onClick={() => {
           const parsedExpenseInput = parseInt(currentExpenseInput, 10); // remove leading 0's
           const currencyConverted = convertToCurrency(parsedExpenseInput);
           console.log(currencyConverted);
