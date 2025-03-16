@@ -14,7 +14,7 @@ const BackspaceKey = () => {
             <IoBackspaceOutline/>
         }
         tappedColor='bg-red-300'
-        onTouchStart={() => {
+        onClick={() => {
           backspaceInput(null);
         }}
     />
