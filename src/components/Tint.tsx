@@ -1,6 +1,10 @@
-import { useStoreActions } from "../model"
+import { useStoreActions } from "../model";
 
-const Tint = () => {
+interface TintProps {
+  functionOnTap: () => void;
+};
+
+const Tint = ({ functionOnTap }: TintProps) => {
 
     const togglePreConfirm = useStoreActions(actions => actions.preConfirm.toggle);
 
@@ -9,6 +13,7 @@ const Tint = () => {
         style={{ background: 'rgba(0, 0, 0, 0.5)' }}
         onTouchStart={() => {
             togglePreConfirm(false);
+            functionOnTap();
         }}
     ></div>
   )

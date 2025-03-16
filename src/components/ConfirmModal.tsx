@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Button from "./Button";
-import { useStoreState } from "../model";
+import { useStoreActions, useStoreState } from "../model";
 import { EXPENSE_NAMES } from "../constants";
 import { convertToCurrency } from "../utils";
 import ConfirmationMessage from "./ConfirmationMessage";
@@ -8,10 +8,11 @@ import ConfirmationMessage from "./ConfirmationMessage";
 const ConfirmModal = () => {
 
     const [loading, setLoading] = useState(false);
-    const [confirmed, setConfirmed] = useState(false);
     const [openAnimation, setOpenAnimation] = useState(false);
     const currentExpenseInput = useStoreState(state => state.expense.current);
     const currentExpenseName = useStoreState(state => state.expenseName.current);
+    const confirmed = useStoreState(state => state.postConfirm.triggered);
+    const togglePostConfirm = useStoreActions(actions => actions.postConfirm.toggle);
 
     const parsedExpenseInput = parseInt(currentExpenseInput, 10); // remove leading 0's
     const currencyConverted = convertToCurrency(parsedExpenseInput);
@@ -40,7 +41,7 @@ const ConfirmModal = () => {
             className='w-full'
             onClick={() => {
                 setLoading(true);
-                setConfirmed(true);
+                togglePostConfirm(true);
             }}
             loading={loading}
         >
