@@ -11,7 +11,7 @@ const ConfirmDrawer = () => {
   return (
     <div className="relative z-10">
         <Tint
-          functionOnTap={() => {
+          onClick={() => {
             if (confirmed) {
               clearExpenseInput(null);
               togglePostConfirm(false);
