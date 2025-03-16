@@ -3,6 +3,7 @@ import ConfirmDrawer from "./ConfirmDrawer"
 import ExpenseInput from "./ExpenseInput"
 import Header from "./Header"
 import Keypad from "./Keypad"
+import PasscodePage from "./PasscodePage"
 
 const ExpenseAppWrapper = () => {
 
@@ -10,10 +11,11 @@ const ExpenseAppWrapper = () => {
 
   return (
     <main className="p-3">
-        {preConfirmTriggered && <ConfirmDrawer/>}
+        <PasscodePage/>
+        {/* {preConfirmTriggered && <ConfirmDrawer/>}
         <Header/>
         <ExpenseInput/>
-        <Keypad/>
+        <Keypad/> */}
     </main>
   )
 }
