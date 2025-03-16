@@ -10,15 +10,19 @@ interface ExpenseModel {
     input: Action<ExpenseModel, number>;
     delete: Action<ExpenseModel, null>;
 };
-
 interface ExpenseNameModel {
     current: string;
     change: Action<ExpenseNameModel, string>
-}
+};
+interface PreConfirm {
+    triggered: boolean;
+    toggle: Action<PreConfirm, boolean>;
+};
 
 export interface GlobalStateModel {
     expense: ExpenseModel;
     expenseName: ExpenseNameModel;
+    preConfirm: PreConfirm;
 };
 
 // state declarations
@@ -41,10 +45,17 @@ const expenseName: ExpenseNameModel = {
         state.current = payload;
     }),
 };
+const preConfirm: PreConfirm = {
+    triggered: false,
+    toggle: action((state, payload) => {
+        state.triggered = payload;
+    }),
+};
 
 const globalState = {
     expense,
     expenseName,
+    preConfirm,
 };
 
 const typedHooks = createTypedHooks<GlobalStateModel>();

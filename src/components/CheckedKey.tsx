@@ -1,11 +1,12 @@
 import { IoCheckmark } from "react-icons/io5";
 import GenericKey from "./GenericKey";
-import { useStoreState } from "../model";
+import { useStoreActions, useStoreState } from "../model";
 import { convertToCurrency } from "../utils";
 
 const CheckedKey = () => {
 
   const currentExpenseInput = useStoreState(state => state.expense.current);
+  const triggerPreConfirm = useStoreActions(actions => actions.preConfirm.toggle);
 
   return (
     <GenericKey
@@ -17,7 +18,19 @@ const CheckedKey = () => {
         tappedColor='bg-gray-700'
         onTouchStart={() => {
           const parsedExpenseInput = parseInt(currentExpenseInput, 10); // remove leading 0's
-          console.log(convertToCurrency(parsedExpenseInput));
+          const currencyConverted = convertToCurrency(parsedExpenseInput);
+          console.log(currencyConverted);
+
+          if (
+            !currencyConverted ||
+            currencyConverted === 'NaN.aN' ||
+            currencyConverted === '0.00'
+
+            ) {
+            return;
+          }
+          
+          triggerPreConfirm(true);
         }}
     />
   )
