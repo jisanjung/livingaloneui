@@ -25,3 +25,10 @@ export const convertToCurrency = (number: number) => {
         return `${formattedDollars}.${cents.padStart(2, '0')}`;
     }
 };
+
+export const currencyStringToFloat = (convertedCurrencyString: string) => {
+    if (!convertedCurrencyString) {
+        return 0;
+    }
+    return parseFloat(convertedCurrencyString.replace(/,/g, ''));
+};

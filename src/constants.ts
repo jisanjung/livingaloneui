@@ -9,3 +9,10 @@ export const EXPENSE_NAMES = {
     GAS: 'gas',
     map: expenseNamesMap,
 };
+
+export const API_PATHS = {
+    balance: '/balance/total_savings',
+    expense: '/expense',
+    all: '/all',
+    updateExpense: '/expense/update',
+};

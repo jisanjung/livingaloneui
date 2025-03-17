@@ -23,12 +23,17 @@ interface PostConfirmModel {
     triggered: boolean;
     toggle: Action<PostConfirmModel, boolean>;
 };
+interface BalanceModel {
+    current: string;
+    update: Action<BalanceModel, string>; 
+};
 
 export interface GlobalStateModel {
     expense: ExpenseModel;
     expenseName: ExpenseNameModel;
     preConfirm: PreConfirmModel;
     postConfirm: PostConfirmModel;
+    balance: BalanceModel;
 };
 
 // state declarations
@@ -66,12 +71,19 @@ const postConfirm: PostConfirmModel = {
         state.triggered = payload;
     }),
 };
+const balance: BalanceModel = {
+    current: '0',
+    update: action((state, payload) => {
+        state.current = payload;
+    }),
+};
 
 const globalState = {
     expense,
     expenseName,
     preConfirm,
     postConfirm,
+    balance,
 };
 
 const typedHooks = createTypedHooks<GlobalStateModel>();

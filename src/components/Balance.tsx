@@ -1,13 +1,26 @@
 import { useEffect, useState } from "react"
 import ShimmerLoading from "./ShimmerLoading"
+import { getBalance } from "./api";
+import { useStoreActions, useStoreState } from "../model";
 
 const Balance = () => {
   
   const [loading, setLoading] = useState(false);
+  const currentBalance = useStoreState(state => state.balance.current);
+  const updateBalance = useStoreActions(actions => actions.balance.update);
 
   useEffect(() => {
-    setLoading(false); // set to false for now, just to avoid lint errors
-  }, []);
+    setLoading(true);
+
+    getBalance()
+    .then(balance => {
+      if (!balance) {
+        return;
+      }
+      setLoading(false);
+      updateBalance(balance);
+    });
+  }, [currentBalance]);
 
   return (
     <>
@@ -16,7 +29,7 @@ const Balance = () => {
         <ShimmerLoading/> :
         <p className="text-2xl font-bold text-emerald-600">
           <span>$</span>
-          <span>1000</span>
+          <span>{currentBalance}</span>
         </p>
       }
     </>

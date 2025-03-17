@@ -4,6 +4,7 @@ import { useStoreActions, useStoreState } from "../model";
 import { EXPENSE_NAMES } from "../constants";
 import { convertToCurrency } from "../utils";
 import ConfirmationMessage from "./ConfirmationMessage";
+import { getBalance, updateExpense } from "./api";
 
 const ConfirmModal = () => {
 
@@ -13,6 +14,7 @@ const ConfirmModal = () => {
     const currentExpenseName = useStoreState(state => state.expenseName.current);
     const confirmed = useStoreState(state => state.postConfirm.triggered);
     const togglePostConfirm = useStoreActions(actions => actions.postConfirm.toggle);
+    const updateBalance = useStoreActions(actions => actions.balance.update);
 
     const parsedExpenseInput = parseInt(currentExpenseInput, 10); // remove leading 0's
     const currencyConverted = convertToCurrency(parsedExpenseInput);
@@ -20,6 +22,20 @@ const ConfirmModal = () => {
     useEffect(() => {
         setOpenAnimation(true);
     }, []);
+
+    const handleConfirmClick = async () => {
+        setLoading(true);
+        const updateSuccess = await updateExpense(currentExpenseName, currencyConverted);
+
+        if (!updateSuccess) {
+            return;
+        }
+        setLoading(false);
+        togglePostConfirm(true);
+
+        const newBalance = await getBalance();
+        updateBalance(newBalance);
+    };
 
   return (
     <div className="fixed right-0 left-0 bg-white py-6 px-3 rounded-t-3xl"
@@ -39,9 +55,8 @@ const ConfirmModal = () => {
         <Button
             type="primary"
             className='w-full'
-            onClick={() => {
-                setLoading(true);
-                togglePostConfirm(true);
+            onClick={async () => {
+                await handleConfirmClick();
             }}
             loading={loading}
         >
