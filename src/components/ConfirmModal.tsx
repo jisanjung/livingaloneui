@@ -4,7 +4,7 @@ import { useStoreActions, useStoreState } from "../model";
 import { EXPENSE_NAMES } from "../constants";
 import { convertToCurrency } from "../utils";
 import ConfirmationMessage from "./ConfirmationMessage";
-import { getBalance, updateExpense } from "./api";
+import { getBalance, updateExpense } from "../api";
 
 const ConfirmModal = () => {
 

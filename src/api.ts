@@ -1,5 +1,5 @@
-import { API_PATHS } from "../constants";
-import { currencyStringToFloat } from "../utils";
+import { API_PATHS } from "./constants";
+import { currencyStringToFloat } from "./utils";
 
 export const getBalance = async () => {
     const totalSavingsApiUrl = import.meta.env.VITE_LIVING_ALONE_API_BASE_PATH + API_PATHS.balance;

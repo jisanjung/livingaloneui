@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import ShimmerLoading from "./ShimmerLoading"
-import { getBalance } from "./api";
+import { getBalance } from "../api";
 import { useStoreActions, useStoreState } from "../model";
 
 const Balance = () => {
