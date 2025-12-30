@@ -1,7 +1,7 @@
 import { IoCheckmark } from "react-icons/io5";
 import GenericKey from "./GenericKey";
 import { useStoreActions, useStoreState } from "../model";
-import { convertToCurrency } from "../utils";
+import { formatNumber } from "../utils";
 
 const CheckedKey = () => {
 
@@ -18,13 +18,13 @@ const CheckedKey = () => {
         tappedColor='bg-gray-700'
         onClick={() => {
           const parsedExpenseInput = parseInt(currentExpenseInput, 10); // remove leading 0's
-          const currencyConverted = convertToCurrency(parsedExpenseInput);
+          const currencyConverted = formatNumber(parsedExpenseInput);
           console.log(currencyConverted);
 
           if (
             !currencyConverted ||
-            currencyConverted === 'NaN.aN' ||
-            currencyConverted === '0.00'
+            currencyConverted === 'NaN' ||
+            currencyConverted === '0'
 
             ) {
             return;

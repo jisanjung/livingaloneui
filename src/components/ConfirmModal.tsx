@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "./Button";
 import { useStoreActions, useStoreState } from "../model";
 import { EXPENSE_NAMES } from "../constants";
-import { convertToCurrency } from "../utils";
+import { formatNumber } from "../utils";
 import ConfirmationMessage from "./ConfirmationMessage";
 import { getBalance, updateExpense } from "../api";
 
@@ -17,7 +17,7 @@ const ConfirmModal = () => {
     const updateBalance = useStoreActions(actions => actions.balance.update);
 
     const parsedExpenseInput = parseInt(currentExpenseInput, 10); // remove leading 0's
-    const currencyConverted = convertToCurrency(parsedExpenseInput);
+    const currencyConverted = formatNumber(parsedExpenseInput);
 
     useEffect(() => {
         setOpenAnimation(true);

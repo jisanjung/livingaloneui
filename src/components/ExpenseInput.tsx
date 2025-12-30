@@ -1,5 +1,5 @@
 import { useStoreState } from "../model";
-import { convertToCurrency } from "../utils";
+import { formatNumber } from "../utils";
 
 const ExpenseInput = () => {
 
@@ -8,9 +8,9 @@ const ExpenseInput = () => {
   const parseExpense = (currentExpenseInput: string) => {
     try {
       const parsedExpense = parseInt(currentExpenseInput);
-      const currencyFormatted = convertToCurrency(parsedExpense);
-      
-      return !currencyFormatted || currencyFormatted === 'NaN.aN' ? '0' : currencyFormatted;
+      const currencyFormatted = formatNumber(parsedExpense);
+
+      return !currencyFormatted || currencyFormatted === 'NaN' ? '0' : currencyFormatted;
     } catch (err) {
       console.log('COULD_NOT_PARSE_EXPENSE_INPUT_TO_NUMBER: ', err);
       return '0';

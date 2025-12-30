@@ -32,3 +32,7 @@ export const currencyStringToFloat = (convertedCurrencyString: string) => {
     }
     return parseFloat(convertedCurrencyString.replace(/,/g, ''));
 };
+
+export const formatNumber = (num: number): string => {
+  return num.toLocaleString();
+};
