@@ -1,6 +1,8 @@
 import { createStore, StoreProvider } from 'easy-peasy';
+import { BrowserRouter, Routes, Route } from 'react-router';
 import globalState, { GlobalStateModel } from './model';
 import ExpenseAppWrapper from './components/ExpenseAppWrapper';
+import PurchaseHistory from './components/PurchaseHistory';
 
 function App() {
 
@@ -8,7 +10,12 @@ function App() {
 
   return (
     <StoreProvider store={store}>
-      <ExpenseAppWrapper/>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<ExpenseAppWrapper/>}/>
+          <Route path="/history" element={<PurchaseHistory/>}/>
+        </Routes>
+      </BrowserRouter>
     </StoreProvider>
   )
 }

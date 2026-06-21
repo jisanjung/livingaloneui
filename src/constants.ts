@@ -10,6 +10,12 @@ export const EXPENSE_NAMES = {
     map: expenseNamesMap,
 };
 
+export const PURCHASE_STORAGE_KEY = 'livingalone_purchases';
+
+export const PURCHASE_EMOJIS = [
+    '🍔', '🛒', '⛽', '☕', '🎬', '🛍️', '🏠', '🚗', '💊', '🎁',
+];
+
 export const API_PATHS = {
     balance: '/balance/total_savings',
     expense: '/expense',

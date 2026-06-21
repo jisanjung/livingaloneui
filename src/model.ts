@@ -1,5 +1,6 @@
 import { Action, action, createTypedHooks } from "easy-peasy";
 import { EXPENSE_NAMES } from "./constants";
+import { loadPurchases, savePurchase, Purchase } from "./storage";
 
 // refer here to how to structure easy-peasy store using TS:
 // https://github.com/ctrlplusb/easy-peasy-typescript/tree/master/src/model
@@ -25,7 +26,11 @@ interface PostConfirmModel {
 };
 interface BalanceModel {
     current: string;
-    update: Action<BalanceModel, string>; 
+    update: Action<BalanceModel, string>;
+};
+interface PurchasesModel {
+    items: Purchase[];
+    add: Action<PurchasesModel, Purchase>;
 };
 
 export interface GlobalStateModel {
@@ -34,6 +39,7 @@ export interface GlobalStateModel {
     preConfirm: PreConfirmModel;
     postConfirm: PostConfirmModel;
     balance: BalanceModel;
+    purchases: PurchasesModel;
 };
 
 // state declarations
@@ -77,6 +83,13 @@ const balance: BalanceModel = {
         state.current = payload;
     }),
 };
+const purchases: PurchasesModel = {
+    items: loadPurchases(),
+    add: action((state, payload) => {
+        state.items.push(payload);
+        savePurchase(payload);
+    }),
+};
 
 const globalState = {
     expense,
@@ -84,6 +97,7 @@ const globalState = {
     preConfirm,
     postConfirm,
     balance,
+    purchases,
 };
 
 const typedHooks = createTypedHooks<GlobalStateModel>();
