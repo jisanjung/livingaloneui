@@ -22,3 +22,5 @@ export const API_PATHS = {
     all: '/all',
     updateExpense: '/expense/update',
 };
+
+export const DUMMY_BALANCE = 1000;
