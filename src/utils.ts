@@ -36,3 +36,12 @@ export const currencyStringToFloat = (convertedCurrencyString: string) => {
 export const formatNumber = (num: number): string => {
   return num.toLocaleString();
 };
+export const formatCurrency = (num: number): string => {
+  // Whole dollars render without decimals to match the keypad display, but a
+  // value with cents needs both digits - toLocaleString would otherwise turn
+  // 2750.50 into "2,750.5".
+  return num.toLocaleString('en-US', {
+    minimumFractionDigits: Number.isInteger(num) ? 0 : 2,
+    maximumFractionDigits: 2,
+  });
+};
