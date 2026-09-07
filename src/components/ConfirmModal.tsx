@@ -17,7 +17,7 @@ const ConfirmModal = () => {
     const confirmed = useStoreState(state => state.postConfirm.triggered);
     const togglePostConfirm = useStoreActions(actions => actions.postConfirm.toggle);
     const updateBalance = useStoreActions(actions => actions.balance.update);
-    const addPurchase = useStoreActions(actions => actions.purchases.add);
+    const savePurchase = useStoreActions(actions => actions.purchases.save);
 
     const parsedExpenseInput = parseInt(currentExpenseInput, 10); // remove leading 0's
     const currencyConverted = formatNumber(parsedExpenseInput);
@@ -31,12 +31,11 @@ const ConfirmModal = () => {
         const updateSuccess = await updateExpense(currentExpenseName, currencyConverted);
 
         if (!updateSuccess) {
+            setLoading(false);
             return;
         }
-        setLoading(false);
-        togglePostConfirm(true);
 
-        addPurchase({
+        await savePurchase({
             id: crypto.randomUUID(),
             emoji: selectedEmoji,
             description: description.trim(),
@@ -44,6 +43,9 @@ const ConfirmModal = () => {
             expenseName: currentExpenseName,
             date: new Date().toISOString(),
         });
+
+        setLoading(false);
+        togglePostConfirm(true);
 
         const newBalance = await getBalance();
         updateBalance(newBalance);

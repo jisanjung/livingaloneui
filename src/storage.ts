@@ -9,9 +9,10 @@ export interface Purchase {
     date: string; // ISO string
 };
 
-// Persistence layer for purchase history.
-// Backed by localStorage for now - swap these two functions for API calls
-// once the backend supports purchase records.
+// Dev-mode backend for purchase history.
+// In production the API is the source of truth (see api.ts); these keep
+// `npm run dev` working offline with real persistence, the same way
+// DUMMY_BALANCE stands in for the balance endpoint.
 
 export const loadPurchases = (): Purchase[] => {
     try {
