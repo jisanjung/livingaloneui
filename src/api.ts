@@ -1,6 +1,6 @@
 import { API_PATHS, DUMMY_BALANCE } from "./constants";
 import { loadPurchases, savePurchase, Purchase } from "./storage";
-import { currencyStringToFloat, formatNumber } from "./utils";
+import { currencyStringToFloat, formatCurrency } from "./utils";
 
 // In dev/local mode, use an in-memory dummy balance instead of calling the API.
 let dummyBalance = DUMMY_BALANCE;
@@ -48,7 +48,7 @@ export const updateExpense = async (currentExpenseName: string, expenseInput: st
 // incoming rows so both the dev and production paths render identically.
 const toPurchase = (row: Purchase): Purchase => ({
     ...row,
-    amount: formatNumber(currencyStringToFloat(row.amount)),
+    amount: formatCurrency(currencyStringToFloat(row.amount)),
 });
 
 export const fetchPurchases = async (): Promise<Purchase[]> => {
