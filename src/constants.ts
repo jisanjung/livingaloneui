@@ -13,7 +13,7 @@ export const EXPENSE_NAMES = {
 export const PURCHASE_STORAGE_KEY = 'livingalone_purchases';
 
 export const PURCHASE_EMOJIS = [
-    '🍔', '🛒', '⛽', '☕', '🎬', '🛍️', '🏠', '🚗', '💊', '🎁',
+    '🍔', '🛒', '⛽', '☕', '🏖️', '🛍️', '🔧', '✈️', '💊', '🎁',
 ];
 
 export const API_PATHS = {
