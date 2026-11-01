@@ -1,48 +1,31 @@
-import { useState } from "react";
+import type React from "react";
 import LoadingSpinner from "./LoadingSpinner";
 
-interface ButtonParams {
-    type: string;
-    children: string | JSX.Element;
-    className: string | undefined;
+interface ButtonProps {
+    children: React.ReactNode;
+    className?: string;
+    disabled?: boolean;
+    loading?: boolean;
     onClick: () => void;
-    loading: boolean;
 };
 
-const Button = ({ 
-    className,
+const Button = ({
+    className = '',
     children,
+    disabled = false,
+    loading = false,
     onClick,
-    loading,
-}: ButtonParams) => {
-
-    const [buttonTapped, setButtonTapped] = useState(false);
+}: ButtonProps) => {
+  const inactive = disabled || loading;
 
   return (
     <button
-        className={`text-white p-3 rounded-full font-bold ${buttonTapped || loading ? 'bg-gray-700' : 'bg-black'} ${className}`}
-        onTouchStart={() => {
-            if (loading) {
-                return;
-            }
-            setButtonTapped(true);
-        }}
-        onTouchEnd={() => setButtonTapped(false)}
-        onClick={() => {
-            if (loading) {
-                return;
-            }
-            onClick();
-        }}
+        type="button"
+        disabled={inactive}
+        className={`h-14 rounded-2xl text-lg font-bold transition-colors flex items-center justify-center ${disabled ? 'bg-neutral-100 text-neutral-400' : 'bg-neutral-900 text-white active:bg-neutral-700'} ${className}`}
+        onClick={() => !inactive && onClick()}
     >
-        {loading ? 
-        <div className="flex justify-center items-center p-1">
-            <LoadingSpinner
-                size="text-xl"
-                color="text-white"
-            />
-        </div> : 
-        children}
+        {loading ? <LoadingSpinner size="text-xl" color="text-white"/> : children}
     </button>
   )
 }

@@ -17,14 +17,6 @@ interface ExpenseNameModel {
     current: string;
     change: Action<ExpenseNameModel, string>
 };
-interface PreConfirmModel {
-    triggered: boolean;
-    toggle: Action<PreConfirmModel, boolean>;
-};
-interface PostConfirmModel {
-    triggered: boolean;
-    toggle: Action<PostConfirmModel, boolean>;
-};
 interface BalanceModel {
     current: string;
     update: Action<BalanceModel, string>;
@@ -44,8 +36,6 @@ interface PurchasesModel {
 export interface GlobalStateModel {
     expense: ExpenseModel;
     expenseName: ExpenseNameModel;
-    preConfirm: PreConfirmModel;
-    postConfirm: PostConfirmModel;
     balance: BalanceModel;
     purchases: PurchasesModel;
 };
@@ -53,7 +43,12 @@ export interface GlobalStateModel {
 // state declarations
 const expense: ExpenseModel = {
     current: '',
+    // Whole dollars, capped at six digits ($999,999) so the display never
+    // overflows, and no leading zeros.
     input: action((state, payload) => {
+        if (state.current.length >= 6 || (!state.current && payload === 0)) {
+            return;
+        }
         state.current += payload;
     }),
     delete: action((state) => {
@@ -71,18 +66,6 @@ const expenseName: ExpenseNameModel = {
     current: EXPENSE_NAMES.ACCUMULATED_SPENDING,
     change: action((state, payload) => {
         state.current = payload;
-    }),
-};
-const preConfirm: PreConfirmModel = {
-    triggered: false,
-    toggle: action((state, payload) => {
-        state.triggered = payload;
-    }),
-};
-const postConfirm: PostConfirmModel = {
-    triggered: false,
-    toggle: action((state, payload) => {
-        state.triggered = payload;
     }),
 };
 const balance: BalanceModel = {
@@ -135,8 +118,6 @@ const purchases: PurchasesModel = {
 const globalState = {
     expense,
     expenseName,
-    preConfirm,
-    postConfirm,
     balance,
     purchases,
 };
