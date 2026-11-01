@@ -20,26 +20,6 @@ export const getBalance = async () => {
     return data.total_savings.toFixed(2);
 };
 
-export const updateExpense = async (currentExpenseName: string, expenseInput: string) => {
-    if (import.meta.env.DEV) {
-        dummyBalance -= currencyStringToFloat(expenseInput);
-        return true;
-    }
-
-    const updateExpenseUrl = `${import.meta.env.VITE_LIVING_ALONE_API_BASE_PATH + API_PATHS.updateExpense}/${currentExpenseName}`;
-    const response = await fetch(updateExpenseUrl, {
-        method: 'post',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ new_expense: currencyStringToFloat(expenseInput) }),
-    });
-    const data = await response.json();
-
-    return data.success;
-};
-
 // Purchases. In dev these fall back to localStorage (see storage.ts) so the app
 // works without a running backend, matching the dummy balance above.
 
@@ -66,27 +46,50 @@ export const fetchPurchases = async (): Promise<Purchase[]> => {
     return data.purchases.map(toPurchase);
 };
 
-export const createPurchase = async (purchase: Purchase): Promise<Purchase> => {
+export interface SpendResult {
+    // The expense was recorded. Nothing else happened when this is false.
+    ok: boolean;
+    // The purchase also made it into history (only attempted when ok).
+    historySaved: boolean;
+    // The canonical row the server stored, when historySaved.
+    purchase?: Purchase;
+    // The recalculated balance, when the server could read it back.
+    balance?: string;
+}
+
+// One request records the expense, saves the purchase to history, and returns
+// the new balance. It replaces three back-to-back calls (update expense,
+// create purchase, refetch balance).
+export const spend = async (expenseName: string, purchase: Purchase): Promise<SpendResult> => {
     if (import.meta.env.DEV) {
+        dummyBalance -= currencyStringToFloat(purchase.amount);
         savePurchase(purchase);
-        return purchase;
+        return { ok: true, historySaved: true, purchase, balance: dummyBalance.toFixed(2) };
     }
 
-    const purchasesUrl = import.meta.env.VITE_LIVING_ALONE_API_BASE_PATH + API_PATHS.purchases;
-    const response = await fetch(purchasesUrl, {
+    const spendUrl = import.meta.env.VITE_LIVING_ALONE_API_BASE_PATH + API_PATHS.spend;
+    const response = await fetch(spendUrl, {
         method: 'post',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        // Send a plain number - the display string is comma-grouped and would
-        // otherwise be truncated ("1,500" -> 1) on the way into the database.
-        body: JSON.stringify({ ...purchase, amount: currencyStringToFloat(purchase.amount) }),
+        body: JSON.stringify({
+            expenseName,
+            // Send a plain number - the display string is comma-grouped and would
+            // otherwise be truncated ("1,500" -> 1) on the way into the database.
+            purchase: { ...purchase, amount: currencyStringToFloat(purchase.amount) },
+        }),
     });
     const data = await response.json();
 
     if (!data.success) {
-        throw new Error(data.message || 'COULD_NOT_SAVE_PURCHASE');
+        return { ok: false, historySaved: false };
     }
-    return toPurchase(data.purchase);
+    return {
+        ok: true,
+        historySaved: Boolean(data.history_saved && data.purchase),
+        purchase: data.purchase ? toPurchase(data.purchase) : undefined,
+        balance: typeof data.total_savings === 'number' ? data.total_savings.toFixed(2) : undefined,
+    };
 };
