@@ -89,7 +89,7 @@ const PurchaseHistory = () => {
           <p className="text-neutral-400 pb-4">{error}</p>
           <button
             type="button"
-            onClick={() => loadPurchases()}
+            onClick={() => loadPurchases({ force: true })}
             className="font-semibold text-emerald-600 bg-emerald-50 px-4 py-2 rounded-full active:bg-emerald-100"
           >
             Try again

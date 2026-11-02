@@ -1,22 +1,20 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import ShimmerLoading from "./ShimmerLoading"
-import { getBalance } from "../api";
 import { useStoreActions, useStoreState } from "../model";
 import { currencyStringToFloat, formatCurrency } from "../utils";
 
-// Fetched once on mount; ExpenseAppWrapper refreshes it after each save.
+// Fetched once per session (the store skips repeat loads). Each save updates
+// it from the /spend response.
 const Balance = () => {
 
-  const [loading, setLoading] = useState(true);
   const currentBalance = useStoreState(state => state.balance.current);
-  const updateBalance = useStoreActions(actions => actions.balance.update);
+  const status = useStoreState(state => state.balance.status);
+  const loadBalance = useStoreActions(actions => actions.balance.load);
+  const loading = status === 'idle' || status === 'loading';
 
   useEffect(() => {
-    getBalance()
-      .then(balance => balance && updateBalance(balance))
-      .catch(err => console.log('COULD_NOT_LOAD_BALANCE: ', err))
-      .finally(() => setLoading(false));
-  }, [updateBalance]);
+    loadBalance();
+  }, [loadBalance]);
 
   return (
     <div className="flex flex-col">
