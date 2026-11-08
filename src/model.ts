@@ -1,7 +1,8 @@
 import { Action, action, Thunk, thunk, createTypedHooks } from "easy-peasy";
 import { EXPENSE_NAMES } from "./constants";
 import { Purchase } from "./storage";
-import { createPurchase, fetchPurchases } from "./api";
+import { createPurchase, fetchPurchases, getBalance } from "./api";
+import { currencyStringToFloat } from "./utils";
 
 // refer here to how to structure easy-peasy store using TS:
 // https://github.com/ctrlplusb/easy-peasy-typescript/tree/master/src/model
@@ -19,7 +20,12 @@ interface ExpenseNameModel {
 };
 interface BalanceModel {
     current: string;
+    loading: boolean;
     update: Action<BalanceModel, string>;
+    // Subtract a spent amount locally so a save doesn't need a refetch.
+    spend: Action<BalanceModel, number>;
+    setLoading: Action<BalanceModel, boolean>;
+    load: Thunk<BalanceModel>;
 };
 interface PurchasesModel {
     items: Purchase[];
@@ -68,15 +74,36 @@ const expenseName: ExpenseNameModel = {
         state.current = payload;
     }),
 };
+// Balance and purchases are loaded once per app load (see App.tsx) and then
+// kept in sync from the client, so moving between pages never refetches.
 const balance: BalanceModel = {
     current: '0',
+    loading: true,
     update: action((state, payload) => {
         state.current = payload;
+    }),
+    spend: action((state, payload) => {
+        state.current = (currencyStringToFloat(state.current) - payload).toFixed(2);
+    }),
+    setLoading: action((state, payload) => {
+        state.loading = payload;
+    }),
+    load: thunk(async (actions) => {
+        actions.setLoading(true);
+        try {
+            const current = await getBalance();
+            if (current) {
+                actions.update(current);
+            }
+        } catch (err) {
+            console.log('COULD_NOT_LOAD_BALANCE: ', err);
+        }
+        actions.setLoading(false);
     }),
 };
 const purchases: PurchasesModel = {
     items: [],
-    loading: false,
+    loading: true,
     error: '',
     setAll: action((state, payload) => {
         state.items = payload;
