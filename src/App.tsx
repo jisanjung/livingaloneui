@@ -8,6 +8,12 @@ import PurchaseHistory from './components/PurchaseHistory';
 // back a fresh, empty store on every re-render and drop any loaded purchases.
 const store = createStore<GlobalStateModel>(globalState);
 
+// Fetch the balance and purchase history once per app load. Doing it here,
+// rather than in a component effect, means route changes and StrictMode's
+// double mount never trigger another request; pages read from the store.
+store.getActions().balance.load();
+store.getActions().purchases.load();
+
 function App() {
 
   return (

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useStoreActions, useStoreState } from "../model";
 import { PURCHASE_EMOJIS } from "../constants";
 import { formatNumber } from "../utils";
-import { getBalance, updateExpense } from "../api";
+import { updateExpense } from "../api";
 import Header from "./Header";
 import ExpenseInput from "./ExpenseInput";
 import EmojiPicker from "./EmojiPicker";
@@ -23,7 +23,7 @@ const ExpenseAppWrapper = () => {
   const currentExpenseInput = useStoreState(state => state.expense.current);
   const currentExpenseName = useStoreState(state => state.expenseName.current);
   const clearExpenseInput = useStoreActions(actions => actions.expense.clear);
-  const updateBalance = useStoreActions(actions => actions.balance.update);
+  const spendFromBalance = useStoreActions(actions => actions.balance.spend);
   const savePurchase = useStoreActions(actions => actions.purchases.save);
 
   const amount = parseInt(currentExpenseInput || '0', 10) || 0;
@@ -55,6 +55,7 @@ const ExpenseAppWrapper = () => {
       setToast({ kind: 'error', message: "Couldn't save. Try again." });
       return;
     }
+    spendFromBalance(amount);
 
     const historySaved = await savePurchase({
       id: crypto.randomUUID(),
@@ -72,10 +73,6 @@ const ExpenseAppWrapper = () => {
     setToast(historySaved
       ? { kind: 'success', message: `Spent $${amountLabel} ${emoji}` }
       : { kind: 'error', message: `Spent $${amountLabel}, but not saved to history` });
-
-    getBalance()
-      .then(balance => balance && updateBalance(balance))
-      .catch(err => console.log('COULD_NOT_REFRESH_BALANCE: ', err));
   };
 
   return (

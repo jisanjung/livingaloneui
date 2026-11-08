@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate } from "react-router";
 import { useStoreActions, useStoreState } from "../model";
@@ -55,10 +54,6 @@ const PurchaseHistory = () => {
   const loading = useStoreState(state => state.purchases.loading);
   const error = useStoreState(state => state.purchases.error);
   const loadPurchases = useStoreActions(actions => actions.purchases.load);
-
-  useEffect(() => {
-    loadPurchases();
-  }, [loadPurchases]);
 
   const sorted = [...purchases].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
