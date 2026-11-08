@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useStoreActions, useStoreState } from "../model";
 import { PURCHASE_EMOJIS } from "../constants";
 import { formatNumber } from "../utils";
+import { getBalance, updateExpense } from "../api";
 import Header from "./Header";
 import ExpenseInput from "./ExpenseInput";
 import EmojiPicker from "./EmojiPicker";
@@ -22,7 +23,8 @@ const ExpenseAppWrapper = () => {
   const currentExpenseInput = useStoreState(state => state.expense.current);
   const currentExpenseName = useStoreState(state => state.expenseName.current);
   const clearExpenseInput = useStoreActions(actions => actions.expense.clear);
-  const spend = useStoreActions(actions => actions.purchases.spend);
+  const updateBalance = useStoreActions(actions => actions.balance.update);
+  const savePurchase = useStoreActions(actions => actions.purchases.save);
 
   const amount = parseInt(currentExpenseInput || '0', 10) || 0;
   const amountLabel = formatNumber(amount);
@@ -41,24 +43,27 @@ const ExpenseAppWrapper = () => {
     }
     setSaving(true);
 
-    // One request: records the expense, saves history, returns the new balance.
-    const { ok, historySaved } = await spend({
-      expenseName: currentExpenseName,
-      purchase: {
-        id: crypto.randomUUID(),
-        emoji,
-        description: note.trim(),
-        amount: amountLabel,
-        expenseName: currentExpenseName,
-        date: new Date().toISOString(),
-      },
-    });
+    let updated = false;
+    try {
+      updated = await updateExpense(currentExpenseName, amountLabel);
+    } catch (err) {
+      console.log('COULD_NOT_UPDATE_EXPENSE: ', err);
+    }
 
-    if (!ok) {
+    if (!updated) {
       setSaving(false);
       setToast({ kind: 'error', message: "Couldn't save. Try again." });
       return;
     }
+
+    const historySaved = await savePurchase({
+      id: crypto.randomUUID(),
+      emoji,
+      description: note.trim(),
+      amount: amountLabel,
+      expenseName: currentExpenseName,
+      date: new Date().toISOString(),
+    });
 
     clearExpenseInput(null);
     setNote('');
@@ -67,6 +72,10 @@ const ExpenseAppWrapper = () => {
     setToast(historySaved
       ? { kind: 'success', message: `Spent $${amountLabel} ${emoji}` }
       : { kind: 'error', message: `Spent $${amountLabel}, but not saved to history` });
+
+    getBalance()
+      .then(balance => balance && updateBalance(balance))
+      .catch(err => console.log('COULD_NOT_REFRESH_BALANCE: ', err));
   };
 
   return (
