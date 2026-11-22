@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStoreActions, useStoreState } from "../model";
 import { PURCHASE_EMOJIS } from "../constants";
 import { formatNumber } from "../utils";
@@ -6,11 +6,12 @@ import { updateExpense } from "../api";
 import Header from "./Header";
 import ExpenseInput from "./ExpenseInput";
 import EmojiPicker from "./EmojiPicker";
+import NoteInput from "./NoteInput";
 import Keypad from "./Keypad";
 import Button from "./Button";
 import Toast, { ToastState } from "./Toast";
 
-// Single-screen entry: type an amount, optionally tag it, tap Save.
+// Single-screen entry: type an amount, pick an emoji, add a note, save.
 // No confirmation sheet - the Save button always shows the exact amount, and a
 // toast confirms the write, so a purchase is logged in as few taps as possible.
 const ExpenseAppWrapper = () => {
@@ -19,6 +20,7 @@ const ExpenseAppWrapper = () => {
   const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<ToastState | null>(null);
+  const noteRef = useRef<HTMLInputElement>(null);
 
   const currentExpenseInput = useStoreState(state => state.expense.current);
   const currentExpenseName = useStoreState(state => state.expenseName.current);
@@ -36,6 +38,15 @@ const ExpenseAppWrapper = () => {
     const timer = setTimeout(() => setToast(null), 2200);
     return () => clearTimeout(timer);
   }, [toast]);
+
+  // Picking an emoji is the step before the note, so jump straight into it.
+  // Focusing inside the tap handler lets iOS open the keyboard.
+  const handleEmojiSelect = (selected: string) => {
+    setEmoji(selected);
+    if (amount) {
+      noteRef.current?.focus();
+    }
+  };
 
   const handleSave = async () => {
     if (!amount || saving) {
@@ -83,9 +94,11 @@ const ExpenseAppWrapper = () => {
     >
       <Toast toast={toast}/>
       <Header/>
-      <ExpenseInput note={note} onNoteChange={setNote}/>
-      <EmojiPicker selected={emoji} onSelect={setEmoji}/>
+      {/* Laid out in entry order, top to bottom: amount, emoji, note, save. */}
+      <ExpenseInput/>
       <Keypad onClear={() => setNote('')}/>
+      <EmojiPicker selected={emoji} onSelect={handleEmojiSelect}/>
+      <NoteInput ref={noteRef} note={note} onNoteChange={setNote} onSubmit={handleSave}/>
       <Button
         className="w-full mt-3"
         disabled={!amount}
